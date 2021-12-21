@@ -1,7 +1,6 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -18,7 +17,12 @@ export default function Home() {
         <div>
           <p>{session.user.name}</p>
           <p>{session.user.email}</p>
-          <img src={session.user.image} width={100} height={100} />
+          <img
+            src={session.user.image}
+            width={100}
+            height={100}
+            style={{ borderRadius: "500px" }}
+          />
         </div>
       ) : (
         <p>Home page</p>

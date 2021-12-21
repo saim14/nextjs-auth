@@ -1,7 +1,8 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { getSession } from "next-auth/react";
 
-export default function BlogPage() {
+export default function BlogPage({ data }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -10,6 +11,28 @@ export default function BlogPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <p>Blog page</p>
+      <p>{data}</p>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin?callback=http://localhost:3000/blog",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      session,
+      data: session
+        ? "List of 100 personalized blogs"
+        : "List of free blogposts",
+    },
+  };
 }
